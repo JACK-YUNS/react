@@ -117,7 +117,7 @@ class RegistrationForm extends React.Component {
 
                     </FormItem>
                     <Row>
-                        <Col span={24}><Button type="Submit" className='margin0auto' onClick={this.handleSubmit.bind(this,'/lableComponent/index')}>提交</Button></Col>
+                        <Col span={24}><Button type="Submit" className='margin0auto' onClick={this.handleSubmit.bind(this,'/home/lableComponent/index')}>提交</Button></Col>
                     </Row>
 
                 </Form>

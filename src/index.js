@@ -5,7 +5,7 @@ import {Provider} from 'react-redux';
 import RouterComponent from './router/index.js';
 import * as serviceWorker from './serviceWorker';
 import {createStore,combineReducers} from 'redux';
-import {reducers} from "./lableComponent/combineReducer";
+import {reducers} from "./pages/lableComponent/combineReducer";
 
 let Store = createStore(reducers);
 

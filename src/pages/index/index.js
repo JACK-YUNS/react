@@ -1,11 +1,15 @@
-import React, { Component } from 'react';
-import './App.css';
+import React,{Component} from "react";
 import {Layout, Menu, Breadcrumb, Icon,} from 'antd';
+import Rulesets from '../home/Rulesets';
+import {Redirect, Route, Switch} from "react-router-dom";
+import LableTable from "../lableComponent";
+import RegistrationForm from "../lableComponent/Add_Lable";
+import Add_Ruleset from "../Add_Rulesets";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-class App extends Component {
+export default class HomeIndex extends Component {
     goPage(path){
         this.props.history.push(path);
     }
@@ -18,10 +22,10 @@ class App extends Component {
       <Menu
         theme="dark"
         mode="horizontal"
-        defaultSelectedKeys={['2']}
+        defaultSelectedKeys={['1']}
         style={{ lineHeight: '64px' }}
       >
-        <Menu.Item key="1" onClick={this.goPage.bind(this,'/lableComponent/index')}>nav 1</Menu.Item>
+        <Menu.Item key="1" onClick={this.goPage.bind(this,'/home/lableComponent/index')}>nav 1</Menu.Item>
         <Menu.Item key="2">nav 2</Menu.Item>
         <Menu.Item key="3">nav 3</Menu.Item>
       </Menu>
@@ -34,7 +38,7 @@ class App extends Component {
           defaultOpenKeys={['sub1']}
           style={{ height: '100%', borderRight: 0 }}
         >
-          <SubMenu key="sub1" title={<span><Icon type="user" />subnav 1</span>}>
+          <SubMenu key="sub1" title={<span><Icon type="user" />标签管理</span>}>
             <Menu.Item key="1">option1</Menu.Item>
             <Menu.Item key="2">option2</Menu.Item>
             <Menu.Item key="3">option3</Menu.Item>
@@ -64,7 +68,11 @@ class App extends Component {
           background: '#fff', padding: 24, margin: 0, minHeight: 280,
         }}
         >
-          Content
+          {/*<Rulesets />*/}
+            <Route path='/home/lableComponent/index' component={LableTable}></Route>
+            <Route path='/home/lableComponent/Add_Lable' component={RegistrationForm}></Route>
+            <Route path='/home/pages/Add_Rulesets' component={Add_Ruleset}/>
+            <Route path='/home/Rulesets' component={Rulesets}></Route>
         </Content>
       </Layout>
     </Layout>
@@ -74,4 +82,3 @@ class App extends Component {
   }
 }
 
-export default App;

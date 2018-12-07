@@ -1,8 +1,10 @@
 import  React from 'react'
-import {HashRouter as Router,Route,Switch} from 'react-router-dom';
-import App from '../App';
-import LableTable from '../lableComponent/index';
-import RegistrationForm from '../lableComponent/Add_Lable';
+import {HashRouter as Router,Route,Switch,Redirect} from 'react-router-dom';
+import HomeIndex from '../pages/index/index';
+import LableTable from '../pages/lableComponent/index';
+import RegistrationForm from '../pages/lableComponent/Add_Lable';
+import Add_Ruleset from '../pages/Add_Rulesets';
+import Rulesets from '../pages/home/Rulesets';
 export default class RouterComponent extends React.Component{
     render(){
         return(
@@ -10,9 +12,8 @@ export default class RouterComponent extends React.Component{
                 <Router>
                     <React.Fragment>
                         <Switch>
-                            <Route exact path='/' component={App}></Route>
-                            <Route path='/lableComponent/index' component={LableTable}></Route>
-                            <Route path='/lableComponent/Add_Lable' component={RegistrationForm}></Route>
+                            <Route path='/home' component={HomeIndex}></Route>
+                            <Redirect to='/home/Rulesets'></Redirect>
                         </Switch>
                     </React.Fragment>
                 </Router>
