@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React,{Component} from "react";
 import {Layout, Menu, Breadcrumb, Icon,} from 'antd';
 import Rulesets from '../home/Rulesets';
