@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table,Button,Input,Select,Row,Col } from 'antd';
 import {connect} from 'react-redux';
+import Axios from "axios";
 const Option = Select.Option;
 
 
@@ -20,7 +21,12 @@ class LableTable extends React.Component{
 
         }
     }
-
+    getData() {
+        Axios.post("/api/label/dataList").then(res => {
+            this.setState({ dataList: res.data });
+                console.log(res, 1);
+        });
+    }
     handleChange (value) {
         console.log(value,'bale');
         searchType = value;
@@ -34,15 +40,16 @@ class LableTable extends React.Component{
                 'policy|18-28': 0, // 18至28以内随机整数, 0只是用来确定类型
             }]
         }
+        this.getData()
         let data = Mock.mock(template);
         for(let i = 0; i < data.users.length; i++){
             data.users[i].workloads = data.users[i].workloads.toString();
             data.users[i].rulesets = data.users[i].rulesets.toString()
         }
-        setTimeout(()=>{
-            this.setState({ dataList: data.users }
-            );
-        },1)
+        // setTimeout(()=>{
+        //     this.setState({ dataList: data.users }
+        //     );
+        // },1)
         // this.setState({workloads: data.workloads,rulesets:data.rulesets,policy:data.policy});
         const columns = [{
             title: 'Name',
