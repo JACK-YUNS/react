@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React from 'react';
 import { Table,Button,Input,Select,Row,Col } from 'antd';
 import {connect} from 'react-redux';
@@ -35,14 +36,19 @@ class LableTable extends React.Component{
         let Mock = require('mockjs')
         let template = {
             "users|5-10": [{ // 随机生成5到10个数组元素
+                'name':'',
+                'type':0,
                 'workloads|1-2': true, // 中文名称
                 'rulesets|1': true, // 属性值自动加 1，初始值为1
-                'policy|18-28': 0, // 18至28以内随机整数, 0只是用来确定类型
+                'policy|18-28': 0,// 18至28以内随机整数, 0只是用来确定类型
+                'key|+1':1
             }]
         }
         this.getData()
         let data = Mock.mock(template);
         for(let i = 0; i < data.users.length; i++){
+            data.users[i].name = this.props.state.addLable.name;
+            data.users[i].type =  this.props.state.addLable.types;
             data.users[i].workloads = data.users[i].workloads.toString();
             data.users[i].rulesets = data.users[i].rulesets.toString()
         }
@@ -70,7 +76,6 @@ class LableTable extends React.Component{
         }];
 
         const dataList =this.state.dataList;
-        console.log(dataList,this.state.dataList,'datalistaaaaaa');
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 this.setState({ changeCheck: selectedRowKeys})
@@ -83,8 +88,7 @@ class LableTable extends React.Component{
                 console.log(selected, selectedRows, changeRows);
             },
             getCheckboxProps: record => ({
-
-                disabled: this.state.dataList.workloads == 'true' || this.state.dataList.rulesets  == 'true',    // Column configuration not to be checked
+                disabled: record.workloads == 'true' || record.rulesets  == 'true',    // Column configuration not to be checked
             }),
         };
         this.setState({columns:columns,dataList:dataList,rowSelection:rowSelection})
@@ -93,6 +97,7 @@ class LableTable extends React.Component{
         this.props.history.push(path);
     }
     deleteBtn(){
+        console.log(this.state.dataList)
         let arr1 = this.state.dataList;
         let arr2 = this.state.changeCheck;
         for(let i =0;i<arr2.length;i++){
@@ -108,15 +113,12 @@ class LableTable extends React.Component{
         this.setState({inputVal:e.target.value})
     }
     searchBtn(){
-        console.log(searchType,'searchBtn',this.state.inputVal,'inputVal')
+        console.log(searchType,'searchBtn',this.state.inputVal,'inputVal');
     }
-
 
     render() {
         return(
             <div id="lableTable">
-
-
                 <Button type="primary" onClick={this.goPage.bind(this,'/home/lableComponent/Add_Lable')}>Add</Button>&nbsp;&nbsp;
                 <Button type="danger" onClick={this.deleteBtn.bind(this)}>Delete</Button>
                 <br/>
