@@ -24,8 +24,7 @@ class RegistrationForm extends React.Component {
     componentWillMount() {
         let Mock = require('mockjs')
         let template = {
-            'name|3': 'a',
-            'workloads|1':true
+            'name|3': 'a'
         }
         let data = Mock.mock(template);
         this.setState({name:data.name,workloads:data.workloads})
@@ -46,8 +45,7 @@ class RegistrationForm extends React.Component {
                 // this.props.dispatch({type:'addLable',name:values.name,types:values.type});
                 Axios.post("/api/label/add",{
                     name:values.name,
-                    type:values.type,
-                    workloads:this.state.workloads
+                    type:values.type
                 }).then(res => {
                     this.setState({ dataList: res.data });
                     console.log(res, 1);

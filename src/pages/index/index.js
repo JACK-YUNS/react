@@ -5,7 +5,7 @@ import Rulesets from '../home/Rulesets';
 import {Redirect, Route, Switch} from "react-router-dom";
 import LableTable from "../lableComponent";
 import RegistrationForm from "../lableComponent/Add_Lable";
-import Add_Ruleset from "../Add_Rulesets";
+import Add_Ruleset from "../rulesetsComponent/Add_Rulesets";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;

@@ -3,7 +3,7 @@ import {HashRouter as Router,Route,Switch,Redirect} from 'react-router-dom';
 import HomeIndex from '../pages/index/index';
 import LableTable from '../pages/lableComponent/index';
 import RegistrationForm from '../pages/lableComponent/Add_Lable';
-import Add_Ruleset from '../pages/Add_Rulesets';
+import Add_Ruleset from '../pages/rulesetsComponent/Add_Rulesets';
 import Rulesets from '../pages/home/Rulesets';
 export default class RouterComponent extends React.Component{
     render(){

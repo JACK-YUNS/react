@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import {Redirect} from 'react-router-dom'
 import {Row, Col,Button,Select,Table,Input} from 'antd';
-import Confirm_Tip from '../Confirm';
+import Confirm_Tip from '../rulesetsComponent/Confirm';
 import {Link} from 'react-router-dom';
 import '../../css/Rulesets/Rulesets.css';
 const Option = Select.Option;
