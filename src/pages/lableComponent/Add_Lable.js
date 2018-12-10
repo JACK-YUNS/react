@@ -1,10 +1,10 @@
 /*eslint-disable*/
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {
     Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,
 } from 'antd';
 import {connect} from 'react-redux';
+import Axios from "axios";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -17,31 +17,49 @@ class RegistrationForm extends React.Component {
         currency:'',
         textValue:'',
         types:0,
-        name:''
+        name:'',
+        workloads: false
 
     };
     componentWillMount() {
         let Mock = require('mockjs')
         let template = {
-            'name|3': 'a'
+            'name|3': 'a',
+            'workloads|1':true
         }
         let data = Mock.mock(template);
-        this.setState({name:data.name})
+        this.setState({name:data.name,workloads:data.workloads})
+    }
+    goPage(path){
+        this.props.history.push(path);
     }
 
     handleSubmit = (path) => {
         // e.preventDefault();
         const nameInput = document.getElementById('name');
-
         this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
+            console.log(this.state.name,'name', values.name,'err',err)
+            if (!err && this.state.name !== values.name ) {
                 this.setState({textValue:values.name,type:values.type});
-                localStorage['name'] = values.name;
-                localStorage['types'] = values.type;
-                this.props.dispatch({type:'addLable',name:values.name,types:values.type});
+                // localStorage['name'] = values.name;
+                // localStorage['types'] = values.type;
+                // this.props.dispatch({type:'addLable',name:values.name,types:values.type});
+                Axios.post("/api/label/add",{
+                    name:values.name,
+                    type:values.type,
+                    workloads:this.state.workloads
+                }).then(res => {
+                    this.setState({ dataList: res.data });
+                    console.log(res, 1);
+                    if(res.status == 200){
+
+                    }
+                });
                 this.props.history.push(path);
+
             }
         });
+
 
     }
 
@@ -75,8 +93,13 @@ class RegistrationForm extends React.Component {
 
         return (
             <div>
-
-                <Form onSubmit={this.handleSubmit}>
+                <Row>
+                    <Col span={12}>
+                        <Button type="Submit" onClick={this.handleSubmit.bind(this,'/home/lableComponent/index')}>Save</Button>&nbsp;&nbsp;
+                        <Button type="button" onClick={this.goPage.bind(this,'/home/lableComponent/index')} >Cancel</Button>
+                    </Col>
+                </Row>
+                <Form onSubmit={this.handleSubmit} className='marginT20px'>
                     <FormItem
                         {...formItemLayout}
                         label={(
@@ -117,9 +140,6 @@ class RegistrationForm extends React.Component {
 
 
                     </FormItem>
-                    <Row>
-                        <Col span={24}><Button type="Submit" className='margin0auto' onClick={this.handleSubmit.bind(this,'/home/lableComponent/index')}>提交</Button></Col>
-                    </Row>
 
                 </Form>
 
