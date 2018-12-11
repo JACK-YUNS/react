@@ -37,7 +37,6 @@ class RegistrationForm extends React.Component {
         // e.preventDefault();
         const nameInput = document.getElementById('name');
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log(this.state.name,'name', values.name,'err',err)
             if (!err && this.state.name !== values.name ) {
                 this.setState({textValue:values.name,type:values.type});
                 // localStorage['name'] = values.name;
@@ -48,7 +47,6 @@ class RegistrationForm extends React.Component {
                     type:values.type
                 }).then(res => {
                     this.setState({ dataList: res.data });
-                    console.log(res, 1);
                     if(res.status == 200){
 
                     }
