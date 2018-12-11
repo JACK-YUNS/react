@@ -83,31 +83,22 @@ class LableTable extends React.Component{
         }];
         this.getData()
         const dataList =this.state.dataList;
+
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                this.setState({ changeCheck: selectedRows})
+               console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows,'onchange');
+            },
+            onSelect: (record, selected, selectedRows) => {
+                // console.log(record, selected, selectedRows,'onselect');
+            },
+            onSelectAll: (selected, selectedRows, changeRows) => {
+                console.log(selected, selectedRows, changeRows,'onSelectAll');
             },
             getCheckboxProps: record => ({
-                disabled: record.workloads === 'In use' || record.rulesets  === 'In use', // Column configuration not to be checked
-                workloads: record.workloads,
-                rulesets:record.rulesets
+                disabled: record.workloads == 'In use' || record.rulesets  == 'In use',    // Column configuration not to be checked
             }),
         };
-        // const rowSelection = {
-        //     onChange: (selectedRowKeys, selectedRows) => {
-        //         this.setState({ changeCheck: selectedRowKeys})
-        //        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows,'onchange');
-        //     },
-        //     onSelect: (record, selected, selectedRows) => {
-        //         // console.log(record, selected, selectedRows,'onselect');
-        //     },
-        //     onSelectAll: (selected, selectedRows, changeRows) => {
-        //         console.log(selected, selectedRows, changeRows,'onSelectAll');
-        //     },
-        //     getCheckboxProps: record => ({
-        //         disabled: record.workloads == 'In use' || record.rulesets  == 'In use',    // Column configuration not to be checked
-        //     }),
-        // };
         this.setState({columns:columns,dataList:dataList,rowSelection:rowSelection})
     }
     getData() {
@@ -125,16 +116,17 @@ class LableTable extends React.Component{
         this.props.history.push(path);
     }
     deleteBtn(){
-        let arr1 = this.state.dataList;
-        let arr2 = this.state.changeCheck;
-        for(let i =0;i<arr2.length;i++){
-            for(let j = 0;j<arr1.length;j++){
-                if(arr2[i] == arr1[j].key ){
-                    arr1.splice(j, 1)
-                }
-            }
+        let changeCheck = this.state.changeCheck;
+        let arr = [];
+        for(let i = 0 ; i < changeCheck.length; i++){
+            arr.push(changeCheck[i].id)
+
         }
-        this.setState({ dataList: arr1 });
+        Axios.post("/api/label/delete",{
+             id: arr
+        }).then(res => {
+            this.getData()
+        });
     }
     inputChange(e){
         this.setState({inputVal:e.target.value})
