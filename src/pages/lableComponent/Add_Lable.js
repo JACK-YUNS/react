@@ -34,24 +34,20 @@ class RegistrationForm extends React.Component {
     }
 
     handleSubmit = (path) => {
-        // e.preventDefault();
-        const nameInput = document.getElementById('name');
+        // const nameInput = document.getElementById('name');
         this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err && this.state.name !== values.name ) {
+            if (!err) {
                 this.setState({textValue:values.name,type:values.type});
-                // localStorage['name'] = values.name;
-                // localStorage['types'] = values.type;
-                // this.props.dispatch({type:'addLable',name:values.name,types:values.type});
-                Axios.post("/api/label/add",{
+                Axios.post("/api/v0/label/?action=createLabel&tenantId=4",{
                     name:values.name,
-                    type:values.type
+                    labelType:values.type
                 }).then(res => {
-                    this.setState({ dataList: res.data });
                     if(res.status == 200){
-
+                        console.log(res)
+                        this.props.history.push(path);
                     }
                 });
-                this.props.history.push(path);
+
 
             }
         });

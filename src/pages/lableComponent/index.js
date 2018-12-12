@@ -25,10 +25,10 @@ class LableTable extends React.Component{
 
         }
     }
-
-
+    //过滤
     filterData(res){
         for(let i = 0; i < res.data.length; i++){
+            res.data[i].key = res.data[i].id;
             if(res.data[i].workloads == true){
                 res.data[i].workloads = 'In use'
             }else{
@@ -51,26 +51,31 @@ class LableTable extends React.Component{
         }
         this.setState({ dataList: res.data });
     }
+
+
     componentDidMount() {
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.setState({ changeCheck: selectedRows})
+                //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows,'onchange');
+            },
+            onSelect: (record, selected, selectedRows) => {
+                // console.log(record, selected, selectedRows,'onselect');
+            },
+            onSelectAll: (selected, selectedRows, changeRows) => {
+                //console.log(selected, selectedRows, changeRows,'onSelectAll');
+            },
+            getCheckboxProps: record => ({
+                disabled: record.workloads == 'In use' || record.rulesets  == 'In use',    // Column configuration not to be checked
+            }),
+        };
         const columns = [{
             title: 'Name',
             dataIndex: 'name',
-            key:'name',
-            // render: text => <a href="#">{text}</a>,
+            key:'name'
         }, {
             title: 'Type',
-            dataIndex: 'type',
-            filters: [{
-                text: 'Application',
-                value: 'Application',
-            }, {
-                text: 'Environment',
-                value: 'Environment',
-            }, {
-                text: 'Location',
-                value:'Location',
-            }],
-            onFilter: (value, record) =>record.type.indexOf(value) === 0
+            dataIndex: 'type'
         }, {
             title: 'Workloads',
             dataIndex: 'workloads',
@@ -83,35 +88,21 @@ class LableTable extends React.Component{
         }];
         this.getData()
         const dataList =this.state.dataList;
-
-        const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                this.setState({ changeCheck: selectedRows})
-               console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows,'onchange');
-            },
-            onSelect: (record, selected, selectedRows) => {
-                // console.log(record, selected, selectedRows,'onselect');
-            },
-            onSelectAll: (selected, selectedRows, changeRows) => {
-                console.log(selected, selectedRows, changeRows,'onSelectAll');
-            },
-            getCheckboxProps: record => ({
-                disabled: record.workloads == 'In use' || record.rulesets  == 'In use',    // Column configuration not to be checked
-            }),
-        };
         this.setState({columns:columns,dataList:dataList,rowSelection:rowSelection})
     }
+
     getData() {
-        Axios.post("/api/label/dataList").then(res => {
+        Axios.post("/api/v0/label/?action=getAllLabel&tenantId=4&page=1&limit=1").then(res => {
             if(res.status == 200){
-                this.filterData(res)
+                console.log('resss',res)
+
+                // this.filterData(res)
             }
         });
     }
     handleChange (value) {
         searchType = value;
     }
-
     goPage(path){
         this.props.history.push(path);
     }
@@ -120,7 +111,6 @@ class LableTable extends React.Component{
         let arr = [];
         for(let i = 0 ; i < changeCheck.length; i++){
             arr.push(changeCheck[i].id)
-
         }
         Axios.post("/api/label/delete",{
              id: arr
@@ -139,11 +129,9 @@ class LableTable extends React.Component{
             name:reset ? this.state.inputVal : '',
             type:reset ? this.state.selectVal : ''
         }).then(res => {
-
             if(res.status == 200){
                 if(!reset){
                     const nameInput = document.getElementById('nameInput');
-                    const typeSelect = document.getElementById('typeSelect');
                     this.setState({selectVal:''});
                     nameInput.value = '';
                 }
@@ -163,6 +151,7 @@ class LableTable extends React.Component{
                         <Select
                             id='typeSelect'
                             style={{ width: '99%' }}
+                            value={this.state.selectVal}
                             onChange={this.selectChange.bind(this)}
                         >
                             <Option value="0">Application</Option>
