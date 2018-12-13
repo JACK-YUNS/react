@@ -39,14 +39,14 @@ class LableTable extends React.Component{
             }else{
                 res.data[i].rulesets = 'Unuse'
             }
-            if(res.data[i].type == 0){
-                res.data[i].type = 'Application'
+            if(res.data[i].labelType == 0){
+                res.data[i].labelType = 'Application'
             }
-            else if(res.data[i].type == 1){
-                res.data[i].type = 'Environment'
+            else if(res.data[i].labelType == 1){
+                res.data[i].labelType = 'Environment'
             }
-            else if(res.data[i].type == 2){
-                res.data[i].type = 'Location'
+            else if(res.data[i].labelType == 2){
+                res.data[i].labelType = 'Location'
             }
         }
         this.setState({ dataList: res.data });
@@ -75,7 +75,7 @@ class LableTable extends React.Component{
             key:'name'
         }, {
             title: 'Type',
-            dataIndex: 'type'
+            dataIndex: 'labelType'
         }, {
             title: 'Workloads',
             dataIndex: 'workloads',
@@ -92,11 +92,9 @@ class LableTable extends React.Component{
     }
 
     getData() {
-        Axios.post("/api/v0/label/?action=getAllLabel&tenantId=4&page=1&limit=1").then(res => {
+        Axios.get("/api/v0/label/?action=getAllLabel&tenantId=4").then(res => {
             if(res.status == 200){
-                console.log('resss',res)
-
-                // this.filterData(res)
+                 this.filterData(res)
             }
         });
     }

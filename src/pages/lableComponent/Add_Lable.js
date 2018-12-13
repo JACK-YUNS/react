@@ -18,7 +18,8 @@ class RegistrationForm extends React.Component {
         textValue:'',
         types:0,
         name:'',
-        workloads: false
+        workloads: false,
+        nameVal:true
 
     };
     componentWillMount() {
@@ -38,13 +39,24 @@ class RegistrationForm extends React.Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 this.setState({textValue:values.name,type:values.type});
-                Axios.post("/api/v0/label/?action=createLabel&tenantId=4",{
-                    name:values.name,
-                    labelType:values.type
+                let labelType = parseInt(values.type)
+                Axios.post("/api/v0/label/?action=createLabel&tenantId=4",
+                    {
+                        name:values.name,
+                        labelType:labelType
                 }).then(res => {
                     if(res.status == 200){
-                        console.log(res)
-                        this.props.history.push(path);
+                        if(res.data == ''){
+                            // const name = document.getElementById('name').parentNode.parentNode;
+                            // name.classList.remove('has-success');
+                            // name.classList.add('has-error')
+                            // console.log(name,'parentNode')
+                            return false;
+                        }
+                        else {
+                            this.setState({nameVal:false})
+                            this.props.history.push(path);
+                        }
                     }
                 });
 
@@ -62,10 +74,16 @@ class RegistrationForm extends React.Component {
         }
     }
     handleCurrencyChange = (currency) => {
+
         if (!('value' in this.props)) {
             this.setState({ currency });
         }
         this.triggerChange({ currency });
+    }
+    sele = (currency)=>{
+        const typeDes = document.getElementsByClassName('typeDes')
+        console.log(typeDes[currency])
+        typeDes[currency].classList.add('displayNone')
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -104,9 +122,11 @@ class RegistrationForm extends React.Component {
                         )}
                     >
                         {getFieldDecorator('name', {
-                            rules: [{ required: true, message: 'Please input your name!', whitespace: true }],
+                            rules: [{ required: true, message: 'Please input your name!', whitespace: true },{
+                                validator: this.state.nameVal,
+                            }],
                         })(
-                            <Input />
+                            <Input id='nameVali' />
                         )}
                     </FormItem>
                     <FormItem
@@ -123,10 +143,11 @@ class RegistrationForm extends React.Component {
                             <Select
                                 value={this.state.currency}
                                 onChange={this.handleCurrencyChange}
+                                onSelect={this.sele.bind(this)}
                             >
-                                <Option value="0">Application</Option>
-                                <Option value="1">Environment</Option>
-                                <Option value="2">Location</Option>
+                                <Option value="0">Application<br/><span className='typeDes'>The name of the application that the Workloads supports.E.g.,eCommerce or ERP.</span></Option>
+                                <Option value="1">Environment<br/><span className='typeDes'>Stage of application development.E.g.,QA.Staging,Production.</span></Option>
+                                <Option value="2">Location<br/><span className='typeDes'></span>Physical or geographic location of the Workload</Option>
                             </Select>
                         )}
 
